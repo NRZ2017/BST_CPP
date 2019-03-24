@@ -8,6 +8,61 @@ class BST
 private:
 	int count = 0;
 
+	bool Delete(T value)
+	{
+		if (node.ChildCount == 2)
+		{
+			BST_Node<T> fin = Minimum(*node.RightChild);
+			node.Data = fin.Data;
+			node = fin;
+		}
+		if (node.ChildCount == 0)
+		{
+			if (node == Root)
+			{
+				Root == nullptr;
+			}
+			else if (node.IsLeftChild)
+			{
+				node.Parent->LeftChild == nullptr;
+			}
+			else if (node.IsRightChild)
+			{
+				node.Parent->RightChild == nullptr;
+			}
+
+		}
+	}
+
+	BST_Node<T> Minimum(BST_Node<T> node)
+	{
+		while (node.LeftChild != nullptr)
+		{
+			node = *node.LeftChild;
+		}
+		return node;
+	}
+	
+	BST_Node<T> Maximum(BST_Node<T> node)
+	{
+		while (node.RightChild != nullptr)
+		{
+			node = *node.RightChild;
+		}
+		return node;
+	}
+
+	BST_Node<T> Find(T value)
+	{
+		BST_Node<T> curr = Root;
+		while (curr != null)
+		{
+			if (curr.Data < value)
+			{
+				curr = curr.LeftChild;
+			}
+		}
+	}
 public:
 	const int& Count = count;
 
@@ -40,28 +95,15 @@ public:
 			return false;
 		}
 	}
-
+	
 	bool Delete(T value)
 	{
-		std::shared_ptr<BST_Node<T>> tempNode = Root;
-		while (tempNode != nullptr)
-		{
-			if (value < tempNode->Data)
-			{
-				tempNode = tempNode->LeftChild;
-				return;
-			}
-			else if (value > tempNode->Data)
-			{
-				tempNode = tempNode->RightChild;
-				return;
-			}
-			else
-			{
-				count--;
-				return true;
-			}
-		}
+		BST_Node<T> toDelete = 
 	}
+
+	
+	
+
+	
 
 };

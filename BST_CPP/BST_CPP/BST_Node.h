@@ -11,6 +11,9 @@ public:
 	std::shared_ptr<BST_Node<T>> RightChild;
 	std::shared_ptr<BST_Node<T>> Parent;
 
+	 bool IsLeftChild = Parent == nullptr ? false : Parent->LeftChild == this;
+	 bool IsRightChild = Parent == nullptr ? false : Parent->RightChild == this;
+
 	int ChildCount()
 	{
 		int childCount = 0;
@@ -27,7 +30,7 @@ public:
 		return childCount;
 	}
 
-	BST_Node<T> FirstChild()
+	BST_Node<T>* FirstChild()
 	{
 		if (LeftChild != nullptr)
 		{
@@ -42,12 +45,14 @@ public:
 			return nullptr;
 		}
 	}
+}
 
 	BST_Node(T data, BST_Node<T> parent = nullptr)
 	{
 		Data = data;
 		Parent = parent;
 	}
+
 private:
 
 };
