@@ -14,15 +14,10 @@ private:
 public:
 	const int& Count = count;
 	bool IsEmpty();
-	std::shared_ptr<BST_Node<T>> Root = 0;
+	std::unique_ptr<BST_Node<T>> Root;
 	bool Contains(T key);
 	bool Delete(T value);
 	void Insert(T value);
-
-	
-
-
-	
 };
 
 template< typename T>
@@ -36,26 +31,27 @@ bool BST<T>::dElete(BST_Node<T>* node)
 	}
 	if (node->ChildCount() == 1)
 	{
-		if (node = Root.get())
+		if (node == Root.get())
 		{
-			Root.swap(node->child(node)->Parent);
+			Root = move(node->FirstChild());
+			Root->Parent = nullptr;
 		}
 		else if (node->IsLeftChild())
 		{
-			node->Parent->LeftChild.swap(node->child(node)->LeftChild);
+			node->FirstChild()->Parent = node->Parent;
+			node->Parent->LeftChild = move(node->FirstChild());
 		}
 		else if (node->IsRightChild())
 		{
-			node->Parent->RightChild.swap(node->child(node)->RightChild);
+			node->FirstChild()->Parent = node->Parent;
+			node->Parent->RightChild = move(node->FirstChild());
 		}
-		node = node->Parent.get();
-
 	}
 	else if (node->ChildCount() == 0)
 	{
 		if (node == Root.get())
 		{
-			Root == nullptr;
+			Root = nullptr;
 		}
 		else if (node->IsLeftChild())
 		{
@@ -120,25 +116,7 @@ bool BST<T>::IsEmpty()
 template< typename T>
 bool BST<T>::Contains(T key)
 {
-	std::shared_ptr<BST_Node<T>> curr = Root;
-	while (curr != nullptr)
-	{
-		if (key < curr->Data)
-		{
-			curr = curr->LeftChild;
-			return;
-		}
-		else if (key > curr->Data)
-		{
-			curr = curr->RightChild;
-			return;
-		}
-		else
-		{
-			return true;
-		}
-		return false;
-	}
+	return Find(key) != nullptr;
 };
 
 template< typename T>
@@ -160,7 +138,7 @@ void BST<T>::Insert(T value)
 	count++;
 	if (Root == nullptr)
 	{
-		Root = std::make_shared<BST_Node<T>>(value);
+		Root = std::make_unique<BST_Node<T>>(value);
 		return;
 	}
 	BST_Node<T>* curr = Root.get();
@@ -170,8 +148,7 @@ void BST<T>::Insert(T value)
 		{
 			if (curr->LeftChild == nullptr)
 			{
-				curr->LeftChild = std::make_shared<BST_Node<T>>(value);
-				curr->LeftChild->Parent = std::make_shared<BST_Node<T>>(value);
+				curr->LeftChild = std::make_unique<BST_Node<T>>(value, curr);
 				break;
 			}
 
@@ -181,8 +158,7 @@ void BST<T>::Insert(T value)
 		{
 			if (curr->RightChild == nullptr)
 			{
-				curr->RightChild = std::make_shared<BST_Node<T>>(value);
-				curr->RightChild = std::make_shared<BST_Node<T>>(value);
+				curr->RightChild = std::make_unique<BST_Node<T>>(value, curr);
 				break;
 			}
 			curr = curr->RightChild.get();

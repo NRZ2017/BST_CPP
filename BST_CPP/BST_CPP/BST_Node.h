@@ -7,16 +7,16 @@ class BST_Node
 {
 public:
 	T Data;
-	std::shared_ptr<BST_Node<T>> LeftChild;
-	std::shared_ptr<BST_Node<T>> RightChild;
-	std::shared_ptr<BST_Node<T>> Parent;
+	std::unique_ptr<BST_Node<T>> LeftChild;
+	std::unique_ptr<BST_Node<T>> RightChild;
+	BST_Node<T>* Parent;
+
 	bool IsLeftChild();
 	bool IsRightChild();
 	int ChildCount();
-	BST_Node<T>* FirstChild();
-	BST_Node<T>* child(BST_Node<T>* node);
+	std::unique_ptr<BST_Node<T>>& FirstChild();
 	
-	BST_Node(T data, std::shared_ptr<BST_Node<T>> parent = nullptr)
+	BST_Node(T data, BST_Node<T>* parent = nullptr)
 	{
 		Data = data;
 		Parent = parent;
@@ -35,7 +35,7 @@ bool BST_Node<T>::IsLeftChild()
 	}
 	else
 	{
-		Parent->LeftChild = this->LeftChild;
+		return Parent->LeftChild.get() == this;
 	}
 }
 
@@ -48,7 +48,7 @@ bool BST_Node<T>::IsRightChild()
 	}
 	else
 	{
-		Parent->RightChild = this->RightChild;
+		return Parent->RightChild.get() == this;
 	}
 }
 
@@ -59,41 +59,22 @@ int BST_Node<T>::ChildCount()
 	if (LeftChild != nullptr)
 	{
 		childCount++;
-		return childCount;
 	}
 	if (RightChild != nullptr)
 	{
 		childCount++;
-		return childCount;
 	}
 	return childCount;
 }
 template <typename T>
-BST_Node<T>* BST_Node<T>::FirstChild()
+std::unique_ptr<BST_Node<T>>& BST_Node<T>::FirstChild()
 {
 	if (LeftChild != nullptr)
 	{
-		return LeftChild.get();
+		return LeftChild;
 	}
-	else if (RightChild != nullptr)
+	else// if (RightChild != nullptr)
 	{
-		return RightChild.get();
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
-template <typename T>
-BST_Node<T>* BST_Node<T>::child(BST_Node<T>* node)
-{
-	if (node->LeftChild == nullptr)
-	{
-		return node->RightChild.get();
-	}
-	else
-	{
-		return node->RightChild.get();
+		return RightChild;
 	}
 }

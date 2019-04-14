@@ -3,27 +3,19 @@
 
 int main()
 {
+	//Fix Insert: add reference to parent
+	//During delete, remove the parent refernce
+
 	BST<int>* tree = new BST<int>();
-	tree->Insert(0);
-	tree->Insert(1);
-	tree->Insert(2);
-	tree->Insert(3);
-	tree->Insert(4);
-	tree->Insert(5);
-	tree->Insert(6);
-	tree->Insert(7);
-	tree->Insert(8);
-	tree->Insert(9);
-	tree->Insert(10);
-	tree->Delete(10);
-	tree->Delete(9);
-	tree->Delete(8);
-	tree->Delete(7);
-	tree->Delete(6);
-	tree->Delete(5);
-	tree->Delete(4);
-	tree->Delete(3);
-	tree->Delete(2);
-	tree->Delete(1);
-	tree->Delete(0);
+	while (true)
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			tree->Insert(i);
+		}
+		for (int i = 0; i < 100; i++)
+		{
+			tree->Delete(i);
+		}
+	}
 };
